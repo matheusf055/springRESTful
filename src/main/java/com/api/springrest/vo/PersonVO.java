@@ -1,7 +1,9 @@
 package com.api.springrest.vo;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
+@JsonPropertyOrder({"id", "firstName" , "LastName", "address", "gender"})
 @NoArgsConstructor @AllArgsConstructor @Data
 public class PersonVO {
 
