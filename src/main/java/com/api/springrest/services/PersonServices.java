@@ -2,6 +2,7 @@ package com.api.springrest.services;
 
 import com.api.springrest.controller.PersonController;
 import com.api.springrest.entity.Person;
+import com.api.springrest.exceptions.RequiredObjectIsNullException;
 import com.api.springrest.exceptions.ResourceNotFoundException;
 import com.api.springrest.repository.PersonRepository;
 import com.api.springrest.vo.PersonVO;
@@ -42,6 +43,10 @@ public class PersonServices {
     }
 
     public PersonVO create(PersonVO person){
+        if (person == null) {
+           throw new RequiredObjectIsNullException("It is not allowed to persist a null object!");
+        }
+
         logger.info("Create one person");
 
         var entity = DozerMapper.parseObject(person, Person.class);
@@ -52,6 +57,10 @@ public class PersonServices {
     }
 
     public PersonVO update(PersonVO person){
+        if (person == null) {
+            throw new RequiredObjectIsNullException("It is not allowed to persist a null object!");
+        }
+
         logger.info("Updating one person");
 
         var entity = repository.findById(person.getKey())
