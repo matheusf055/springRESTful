@@ -1,13 +1,18 @@
 package com.api.springrest.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.dozermapper.core.Mapping;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
-@JsonPropertyOrder({"id", "firstName" , "LastName", "address", "gender"})
+@JsonPropertyOrder({"key", "firstName" , "LastName", "address", "gender"})
 @NoArgsConstructor @AllArgsConstructor @Data
-public class PersonVO {
+public class PersonVO extends RepresentationModel<PersonVO> {
 
-    private Long id;
+    @JsonProperty("id")
+    @Mapping("id")
+    private Long key;
     private String firstName;
     private String lastName;
     private String address;
