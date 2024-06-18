@@ -7,7 +7,7 @@ import com.api.springrest.entity.Person;
 import com.api.springrest.exceptions.RequiredObjectIsNullException;
 import com.api.springrest.repository.PersonRepository;
 import com.api.springrest.services.PersonServices;
-import com.api.springrest.unittests.MockPerson;
+import com.api.springrest.unittests.mocks.MockPerson;
 import com.api.springrest.vo.PersonVO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

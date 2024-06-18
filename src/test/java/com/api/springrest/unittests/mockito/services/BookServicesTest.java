@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.api.springrest.entity.Book;
-import com.api.springrest.entity.Person;
 import com.api.springrest.exceptions.RequiredObjectIsNullException;
 import com.api.springrest.repository.BookRepository;
 import com.api.springrest.services.BookServices;
-import com.api.springrest.unittests.MockBook;
+import com.api.springrest.unittests.mocks.MockBook;
 import com.api.springrest.vo.BookVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

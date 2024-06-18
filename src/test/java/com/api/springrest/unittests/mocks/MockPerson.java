@@ -1,4 +1,4 @@
-package com.api.springrest.unittests;
+package com.api.springrest.unittests.mocks;
 
 import com.api.springrest.entity.Person;
 import com.api.springrest.vo.PersonVO;

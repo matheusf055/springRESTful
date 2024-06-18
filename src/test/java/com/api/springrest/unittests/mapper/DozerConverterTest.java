@@ -1,8 +1,9 @@
-package com.api.springrest.unittests;
+package com.api.springrest.unittests.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.api.springrest.entity.Person;
+import com.api.springrest.unittests.mocks.MockPerson;
 import com.api.springrest.vo.PersonVO;
 import com.api.springrest.vo.mapper.DozerMapper;
 import org.junit.jupiter.api.BeforeEach;

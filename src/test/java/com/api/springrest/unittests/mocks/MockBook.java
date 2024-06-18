@@ -1,4 +1,4 @@
-package com.api.springrest.unittests;
+package com.api.springrest.unittests.mocks;
 
 import com.api.springrest.entity.Book;
 import com.api.springrest.vo.BookVO;
