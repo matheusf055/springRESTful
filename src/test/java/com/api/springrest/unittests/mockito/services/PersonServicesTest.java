@@ -1,7 +1,7 @@
 package com.api.springrest.unittests.mockito.services;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.api.springrest.entity.Person;
 import com.api.springrest.exceptions.RequiredObjectIsNullException;
@@ -9,48 +9,38 @@ import com.api.springrest.repository.PersonRepository;
 import com.api.springrest.services.PersonServices;
 import com.api.springrest.unittests.MockPerson;
 import com.api.springrest.vo.PersonVO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
 class PersonServicesTest {
 
-	MockPerson input;
+	@Mock
+	private PersonRepository repository;
 
 	@InjectMocks
 	private PersonServices services;
 
-	@Mock
-	PersonRepository repository;
-
-	@BeforeEach
-	void setUpMocks() {
-		input = new MockPerson();
-		MockitoAnnotations.openMocks(1L);
-	}
+	private MockPerson mockPerson = new MockPerson();
 
 	@Test
 	void testFindById() {
-		Person entity = input.mockEntity(1);
+		Person entity = mockPerson.mockEntity(1);
 		entity.setId(1L);
 
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
 		PersonVO result = services.findById(1L);
+
 		assertNotNull(result);
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
-
 		assertEquals("Addres Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
@@ -59,13 +49,13 @@ class PersonServicesTest {
 
 	@Test
 	void testCreate() {
-		Person entity = input.mockEntity(1);
+		Person entity = mockPerson.mockEntity(1);
 		entity.setId(1L);
 
 		Person persisted = entity;
 		persisted.setId(1L);
 
-		PersonVO vo = input.mockVO(1);
+		PersonVO vo = mockPerson.mockVO(1);
 		vo.setKey(1L);
 
 		when(repository.save(entity)).thenReturn(persisted);
@@ -75,7 +65,6 @@ class PersonServicesTest {
 		assertNotNull(result);
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
-
 		assertEquals("Addres Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
@@ -94,17 +83,15 @@ class PersonServicesTest {
 		assertTrue(actualMessage.contains(expectedMessage));
 	}
 
-
 	@Test
 	void testUpdate() {
-		Person entity = input.mockEntity(1);
+		Person entity = mockPerson.mockEntity(1);
 
 		Person persisted = entity;
 		persisted.setId(1L);
 
-		PersonVO vo = input.mockVO(1);
+		PersonVO vo = mockPerson.mockVO(1);
 		vo.setKey(1L);
-
 
 		when(repository.findById(1L)).thenReturn(Optional.of(entity));
 		when(repository.save(entity)).thenReturn(persisted);
@@ -114,7 +101,6 @@ class PersonServicesTest {
 		assertNotNull(result);
 		assertNotNull(result.getKey());
 		assertNotNull(result.getLinks());
-
 		assertEquals("Addres Test1", result.getAddress());
 		assertEquals("First Name Test1", result.getFirstName());
 		assertEquals("Last Name Test1", result.getLastName());
@@ -134,18 +120,17 @@ class PersonServicesTest {
 	}
 
 	@Test
-	void testDelete() {
-		Person entity = input.mockEntity(1);
-		entity.setId(1L);
+	public void testDelete() {
+		Person person = mockPerson.mockEntity(1);
 
-		when(repository.findById(1L)).thenReturn(Optional.of(entity));
+		when(repository.findById(1L)).thenReturn(Optional.of(person));
 
 		services.delete(1L);
 	}
 
 	@Test
 	void testFindAll() {
-		List<Person> list = input.mockEntityList();
+		List<Person> list = mockPerson.mockEntityList();
 
 		when(repository.findAll()).thenReturn(list);
 
@@ -159,7 +144,6 @@ class PersonServicesTest {
 		assertNotNull(personOne);
 		assertNotNull(personOne.getKey());
 		assertNotNull(personOne.getLinks());
-
 		assertEquals("Addres Test1", personOne.getAddress());
 		assertEquals("First Name Test1", personOne.getFirstName());
 		assertEquals("Last Name Test1", personOne.getLastName());
@@ -170,7 +154,6 @@ class PersonServicesTest {
 		assertNotNull(personFour);
 		assertNotNull(personFour.getKey());
 		assertNotNull(personFour.getLinks());
-
 		assertEquals("Addres Test4", personFour.getAddress());
 		assertEquals("First Name Test4", personFour.getFirstName());
 		assertEquals("Last Name Test4", personFour.getLastName());
@@ -181,12 +164,9 @@ class PersonServicesTest {
 		assertNotNull(personSeven);
 		assertNotNull(personSeven.getKey());
 		assertNotNull(personSeven.getLinks());
-
 		assertEquals("Addres Test7", personSeven.getAddress());
 		assertEquals("First Name Test7", personSeven.getFirstName());
 		assertEquals("Last Name Test7", personSeven.getLastName());
 		assertEquals("Female", personSeven.getGender());
-
 	}
-
 }

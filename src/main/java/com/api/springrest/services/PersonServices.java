@@ -57,6 +57,10 @@ public class PersonServices {
     }
 
     public PersonVO update(PersonVO person){
+        if (person == null) {
+            throw new RequiredObjectIsNullException("It is not allowed to persist a null object!");
+        }
+
         logger.info("Updating one person");
 
         var entity = repository.findById(person.getKey())
