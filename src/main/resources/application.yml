@@ -1,5 +1,10 @@
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://matheus.com.br
+security:
+  jwt:
+    token:
+      secret-key: 53ccr37
+      expire-lenght: 3600000
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/rest_with_spring_boot?useTimezone=true&serverTimezone=UTC
@@ -12,6 +17,6 @@ spring:
       ddl-auto: update
       show_sql: false
 springdoc:
-  pathsToMatch: /api/**/v1/**
+  pathsToMatch: /api/**/v1/**,/auth/**
   swagger-ui:
     use-root-path: true

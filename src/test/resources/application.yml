@@ -1,6 +1,11 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+security:
+  jwt:
+    token:
+      secret-key: 53ccr37
+      expire-lenght: 3600000
   jpa:
     open-in-view: false
     hibernate:

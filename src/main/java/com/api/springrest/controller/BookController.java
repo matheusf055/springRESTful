@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController()
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("api/book/v1")
-@Tag(name = "Book", description = "Endepoints for Managing Books")
+@Tag(name = "Book", description = "Endpoints for Managing Books")
 public class BookController {
 
     private final BookServices services;

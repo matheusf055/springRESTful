@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/person/v1")
-@Tag(name = "Person", description = "Endepoints for Managing People")
+@Tag(name = "Person", description = "Endpoints for Managing People")
 public class PersonController {
 
     private final PersonServices service;
