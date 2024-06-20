@@ -11,6 +11,8 @@ import static  org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static  org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +26,15 @@ public class PersonServices {
     private final Logger logger = Logger.getLogger(PersonServices.class.getName());
     private final PersonRepository repository;
 
-    public List<PersonVO> findAll(){
+    public Page<PersonVO> findAll(Pageable pageable){
         logger.info("Finding all people!");
 
-        var persons = DozerMapper.parseListObject(repository.findAll(), PersonVO.class) ;
-        persons
-                .stream()
-                .forEach(p -> p.add(linkTo(methodOn(PersonController.class).findbyId(p.getKey())).withSelfRel()));
-        return persons;
+        var personPage = repository.findAll(pageable);
+
+        var PersonVoPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+        PersonVoPage.map(p -> p.add(linkTo(methodOn(PersonController.class).findbyId(p.getKey())).withSelfRel()));
+
+        return PersonVoPage;
     }
 
     public PersonVO findById(Long id){

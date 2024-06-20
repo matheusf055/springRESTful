@@ -9,6 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +25,7 @@ import java.util.List;
 @Tag(name = "Person", description = "Endpoints for Managing People")
 public class PersonController {
 
-    private final PersonServices service;
+    private final PersonServices services;
 
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Operation(summary = "Finds all people", description = "Finds all people", tags = {"Person"}, responses = {
@@ -36,7 +40,7 @@ public class PersonController {
             @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
     })
     public PersonVO findbyId(@PathVariable(value = "id") Long id) {
-        return service.findById(id);
+        return services.findById(id);
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -49,8 +53,15 @@ public class PersonController {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
     })
-    public List<PersonVO> findAll() {
-        return service.findAll();
+    public ResponseEntity <Page<PersonVO>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction
+            ){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+        return ResponseEntity.ok(services.findAll(pageable));
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -62,7 +73,7 @@ public class PersonController {
             @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
     })
     public PersonVO create(@RequestBody PersonVO person) {
-        return service.create(person);
+        return services.create(person);
     }
 
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -76,7 +87,7 @@ public class PersonController {
             @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
     })
     public PersonVO update(@RequestBody PersonVO person) {
-        return service.update(person);
+        return services.update(person);
     }
 
     @PatchMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -94,7 +105,7 @@ public class PersonController {
             }
     )
     public PersonVO disablePerson(@PathVariable(value = "id") Long id) {
-        return service.disablePerson(id);
+        return services.disablePerson(id);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -106,7 +117,7 @@ public class PersonController {
             @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
     })
     public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-        service.delete(id);
+        services.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
