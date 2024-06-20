@@ -62,7 +62,7 @@ public class PersonControllerTest extends AbstractIntegrationTest {
                 .extract()
                 .body()
                 .as(TokenVO.class)
-                .getAccesToken();
+                .getAccessToken();
 
         specification = new RequestSpecBuilder()
                 .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)

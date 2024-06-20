@@ -13,6 +13,6 @@ public class TokenVO {
     private Boolean authenticated;
     private Date created;
     private Date expiration;
-    private String accesToken;
+    private String accessToken;
     private String refreshToken;
 }
