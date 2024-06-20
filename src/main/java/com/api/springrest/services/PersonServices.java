@@ -9,8 +9,10 @@ import com.api.springrest.vo.PersonVO;
 import com.api.springrest.vo.mapper.DozerMapper;
 import static  org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static  org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -74,6 +76,19 @@ public class PersonServices {
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
 
         vo.add(linkTo(methodOn(PersonController.class).findbyId(vo.getKey())).withSelfRel());
+        return vo;
+    }
+
+    @Transactional
+    public PersonVO disablePerson(Long id){
+        logger.info("Disabling one person!");
+
+        repository.disablePerson(id);
+
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        var vo = DozerMapper.parseObject(entity, PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findbyId(id)).withSelfRel());
         return vo;
     }
 

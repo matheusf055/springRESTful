@@ -12,4 +12,9 @@ public class PersonVO {
     private String lastName;
     private String address;
     private String gender;
+    private boolean enabled;
+
+    public boolean getEnabled() {
+        return enabled;
+    }
 }

@@ -17,4 +17,5 @@ public class PersonVO extends RepresentationModel<PersonVO> {
     private String lastName;
     private String address;
     private String gender;
+    private String enabled;
 }
