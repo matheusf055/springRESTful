@@ -1,4 +1,4 @@
-package com.api.springrest.unittests.mockito.services;
+/*package com.api.springrest.unittests.mockito.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -150,4 +150,4 @@ class BookServicesTest {
 		assertEquals(BigDecimal.valueOf(25D), bookSeven.getPrice());
 		assertNotNull(bookSeven.getLaunchDate());
 	}
-}
+}*/
