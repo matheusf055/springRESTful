@@ -2,7 +2,6 @@ package com.api.springrest.integrationtests.testcontainers.wrapper;
 
 import java.io.Serializable;
 
-import com.api.springrest.integrationtests.testcontainers.wrapper.PersonEmbeddedVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
