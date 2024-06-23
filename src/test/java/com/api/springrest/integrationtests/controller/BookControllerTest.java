@@ -5,6 +5,7 @@ import com.api.springrest.integrationtests.testcontainers.AbstractIntegrationTes
 import com.api.springrest.integrationtests.testcontainers.vo.AccountCredentialsVO;
 import com.api.springrest.integrationtests.testcontainers.vo.BookVO;
 import com.api.springrest.integrationtests.testcontainers.vo.TokenVO;
+import com.api.springrest.integrationtests.testcontainers.wrapper.WrapperBookVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -201,10 +201,16 @@ public class BookControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
-    public void testFindAll() throws JsonProcessingException, JsonMappingException {
+    @Order(5)
+    public void testFindAll() throws JsonMappingException, JsonProcessingException {
+        authorization();
+        assertNotNull(specification, "Specification must be initialized before use");
+
+        System.out.println("Specification state before testFindAll: " + specification);
+
         var content = given().spec(specification)
                 .contentType(TestConfigs.CONTENT_TYPE)
+                .queryParams("page", 0 , "limit", 12, "direction", "asc")
                 .when()
                 .get()
                 .then()
@@ -213,35 +219,30 @@ public class BookControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        List<BookVO> books = Arrays.asList(mapper.readValue(content, BookVO[].class));
+        WrapperBookVO wrapper = mapper.readValue(content, WrapperBookVO.class);
+        List<BookVO> books = wrapper.getEmbedded().getBooks();
 
-        assertNotNull(books);
-        assertFalse(books.isEmpty());
+        BookVO foundBookOne = books.get(0);
 
-        BookVO bookOne = books.get(0);
-        BookVO bookTwo = books.get(1);
+        assertNotNull(foundBookOne.getId());
+        assertNotNull(foundBookOne.getTitle());
+        assertNotNull(foundBookOne.getAuthor());
+        assertNotNull(foundBookOne.getPrice());
+        assertTrue(foundBookOne.getId() > 0);
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
+        assertEquals(54.0, foundBookOne.getPrice().doubleValue(), 0.001);
 
-        assertNotNull(bookOne.getId());
-        assertNotNull(bookOne.getAuthor());
-        assertNotNull(bookOne.getTitle());
-        assertNotNull(bookOne.getPrice());
-        assertNotNull(bookOne.getLaunchDate());
+        BookVO foundBookFive = books.get(4);
 
-        assertNotNull(bookTwo.getId());
-        assertNotNull(bookTwo.getAuthor());
-        assertNotNull(bookTwo.getTitle());
-        assertNotNull(bookTwo.getPrice());
-        assertNotNull(bookTwo.getLaunchDate());
-
-        assertEquals(1, bookOne.getId());
-        assertEquals("Working effectively with legacy code", bookOne.getTitle());
-        assertEquals("Michael C. Feathers", bookOne.getAuthor());
-        assertEquals(new BigDecimal("49.00"), bookOne.getPrice());
-
-        assertEquals(2, bookTwo.getId());
-        assertEquals("Design Patterns", bookTwo.getTitle());
-        assertEquals("Ralph Johnson, Erich Gamma, John Vlissides e Richard Helm", bookTwo.getAuthor());
-        assertEquals(new BigDecimal("45.00"), bookTwo.getPrice());
+        assertNotNull(foundBookFive.getId());
+        assertNotNull(foundBookFive.getTitle());
+        assertNotNull(foundBookFive.getAuthor());
+        assertNotNull(foundBookFive.getPrice());
+        assertTrue(foundBookFive.getId() > 0);
+        assertEquals("Domain Driven Design", foundBookFive.getTitle());
+        assertEquals("Eric Evans", foundBookFive.getAuthor());
+        assertEquals(92.0, foundBookFive.getPrice().doubleValue(), 0.001);
     }
 
 
